@@ -4,6 +4,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const processor = new AnkiProcessor();
     let cards = [];
     let currentIndex = 0;
+    let currentFilename = '';
+
+    const MAX_SAVED_FILES = 5;
+
+    function getResumeState() {
+        try {
+            return JSON.parse(localStorage.getItem('anki_resume_state')) || {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function saveResumeState(state) {
+        localStorage.setItem('anki_resume_state', JSON.stringify(state));
+    }
+
+    function updateProgressInStorage() {
+        if (!currentFilename) return;
+        const state = getResumeState();
+        if (state[currentFilename]) {
+            state[currentFilename].index = currentIndex;
+            state[currentFilename].lastAccessed = Date.now();
+            saveResumeState(state);
+        }
+    }
 
     // Elements
     const dropZone = document.getElementById('drop-zone');
@@ -65,8 +90,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            currentFilename = file.name;
+            const state = getResumeState();
+            
+            if (state[currentFilename]) {
+                // Ensure index is within bounds
+                currentIndex = Math.min(state[currentFilename].index, cards.length - 1);
+                state[currentFilename].lastAccessed = Date.now();
+            } else {
+                currentIndex = 0;
+                state[currentFilename] = { index: 0, lastAccessed: Date.now() };
+            }
+            
+            // Keep only up to MAX_SAVED_FILES based on lastAccessed
+            const keys = Object.keys(state);
+            if (keys.length > MAX_SAVED_FILES) {
+                const sortedKeys = keys.sort((a, b) => state[b].lastAccessed - state[a].lastAccessed);
+                const keysToRemove = sortedKeys.slice(MAX_SAVED_FILES);
+                keysToRemove.forEach(key => delete state[key]);
+            }
+            
+            saveResumeState(state);
+
             deckNameLabel.textContent = file.name.replace('.apkg', '');
-            currentIndex = 0;
             renderCard();
             
             uploadView.style.display = 'none';
@@ -111,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentIndex < cards.length - 1) {
             currentIndex++;
             renderCard();
+            updateProgressInStorage();
         }
     }
 
@@ -118,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentIndex > 0) {
             currentIndex--;
             renderCard();
+            updateProgressInStorage();
         }
     }
 
@@ -127,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropZone.style.display = 'flex';
         fileInput.value = '';
         cards = [];
+        currentFilename = '';
     }
 
     // Control listeners
