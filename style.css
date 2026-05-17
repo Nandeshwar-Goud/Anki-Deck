@@ -29,13 +29,13 @@ body {
   align-items: center;
   overflow-x: hidden;
   background: radial-gradient(circle at top left, #1e1b4b, transparent),
-              radial-gradient(circle at bottom right, #312e81, transparent),
-              #0f172a;
+    radial-gradient(circle at bottom right, #312e81, transparent),
+    #0f172a;
 }
 
 #app {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1600px;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -88,7 +88,8 @@ h1 {
   text-align: center;
 }
 
-.drop-zone:hover, .drop-zone.drag-over {
+.drop-zone:hover,
+.drop-zone.drag-over {
   border-color: var(--accent-primary);
   background: rgba(99, 102, 241, 0.1);
   transform: translateY(-5px);
@@ -147,11 +148,65 @@ h1 {
   transition: width 0.3s ease;
 }
 
+.study-layout {
+  display: grid;
+  grid-template-columns: 1fr minmax(auto, 700px) 1fr;
+  gap: 2rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+.card-column {
+  grid-column: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scribble-column {
+  grid-column: 3;
+  width: 100%;
+  max-width: 500px;
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.scribble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.scribble-header button {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 0.5rem;
+}
+
+#scribble-canvas {
+  flex-grow: 1;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  cursor: crosshair;
+  touch-action: none;
+}
+
 /* Card Styles */
 .flashcard-wrapper {
   perspective: 1200px;
   width: 100%;
-  max-width: 800px;
   aspect-ratio: 16 / 10;
 }
 
@@ -253,8 +308,13 @@ button.primary {
 }
 
 @keyframes rotation {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Transitions */
@@ -263,8 +323,15 @@ button.primary {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Markdown/HTML content within cards */
@@ -272,18 +339,50 @@ button.primary {
   margin-bottom: 1rem;
 }
 
-.card-content ul, .card-content ol {
+.card-content ul,
+.card-content ol {
   text-align: left;
   display: inline-block;
   margin: 0 auto;
 }
 
 /* Media Queries */
+@media (max-width: 1200px) {
+  .study-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-column {
+    max-width: 800px;
+  }
+
+  .scribble-column {
+    max-width: 800px;
+    width: 100%;
+    min-height: 300px;
+    justify-self: center;
+  }
+}
+
 @media (max-width: 640px) {
-  h1 { font-size: 2rem; }
-  .flashcard-wrapper { aspect-ratio: 1 / 1; }
-  .card-face { font-size: 1.25rem; padding: 1.5rem; }
-  #app { padding: 1rem; }
+  h1 {
+    font-size: 2rem;
+  }
+
+  .flashcard-wrapper {
+    aspect-ratio: 1 / 1;
+  }
+
+  .card-face {
+    font-size: 1.25rem;
+    padding: 1.5rem;
+  }
+
+  #app {
+    padding: 1rem;
+  }
 }
 
 /* Footer */
@@ -294,4 +393,3 @@ button.primary {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
-

@@ -49,6 +49,91 @@ document.addEventListener('DOMContentLoaded', () => {
     const flipBtn = document.getElementById('flip-btn');
     const resetBtn = document.getElementById('reset-btn');
 
+    // Canvas elements
+    const canvas = document.getElementById('scribble-canvas');
+    const clearScribbleBtn = document.getElementById('clear-scribble-btn');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    function initCanvas() {
+        if (!canvas) return;
+
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#a855f7'; // accent-secondary color
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            
+            [lastX, lastY] = [x, y];
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+            
+            const rect = canvas.getBoundingClientRect();
+            [lastX, lastY] = [clientX - rect.left, clientY - rect.top];
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchcancel', stopDrawing);
+        
+        clearScribbleBtn.addEventListener('click', clearCanvas);
+    }
+    
+    function clearCanvas() {
+        if (ctx && canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+    
+    initCanvas();
+
     // Event Listeners
     dropZone.addEventListener('click', () => fileInput.click());
     
@@ -118,6 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadView.style.display = 'none';
             studyView.style.display = 'flex';
             studyView.classList.add('fade-in');
+            
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 50);
         } catch (error) {
             console.error(error);
             alert('Error processing file: ' + error.message);
@@ -158,6 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex++;
             renderCard();
             updateProgressInStorage();
+            clearCanvas();
         }
     }
 
@@ -166,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex--;
             renderCard();
             updateProgressInStorage();
+            clearCanvas();
         }
     }
 

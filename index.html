@@ -39,33 +39,47 @@
                     </div>
                 </div>
 
-                <div class="flashcard-wrapper">
-                    <div class="flashcard" id="flashcard">
-                        <div class="card-face card-front">
-                            <div class="card-content" id="card-front-content">
-                                <!-- Question goes here -->
+                <div class="study-layout">
+                    <div class="card-column">
+                        <div class="flashcard-wrapper">
+                            <div class="flashcard" id="flashcard">
+                                <div class="card-face card-front">
+                                    <div class="card-content" id="card-front-content">
+                                        <!-- Question goes here -->
+                                    </div>
+                                </div>
+                                <div class="card-face card-back">
+                                    <div class="card-content" id="card-back-content">
+                                        <!-- Answer goes here -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-face card-back">
-                            <div class="card-content" id="card-back-content">
-                                <!-- Answer goes here -->
-                            </div>
+
+                        <div class="controls">
+                            <button id="prev-btn" title="Previous (Left Arrow)">
+                                <i class="fa-solid fa-chevron-left"></i> Prev
+                            </button>
+                            <button id="flip-btn" class="primary" title="Flip (Space)">
+                                <i class="fa-solid fa-rotate"></i> Flip
+                            </button>
+                            <button id="next-btn" title="Next (Right Arrow)">
+                                Next <i class="fa-solid fa-chevron-right"></i>
+                            </button>
                         </div>
+                    </div>
+
+                    <div class="scribble-column">
+                        <div class="scribble-header">
+                            <span>Scribble Pad</span>
+                            <button id="clear-scribble-btn" title="Clear">
+                                <i class="fa-solid fa-eraser"></i> Clear
+                            </button>
+                        </div>
+                        <canvas id="scribble-canvas"></canvas>
                     </div>
                 </div>
 
-                <div class="controls">
-                    <button id="prev-btn" title="Previous (Left Arrow)">
-                        <i class="fa-solid fa-chevron-left"></i> Prev
-                    </button>
-                    <button id="flip-btn" class="primary" title="Flip (Space)">
-                        <i class="fa-solid fa-rotate"></i> Flip
-                    </button>
-                    <button id="next-btn" title="Next (Right Arrow)">
-                        Next <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-                </div>
-                
                 <button id="reset-btn" style="margin-top: 2rem; opacity: 0.7; font-size: 0.8rem;">
                     <i class="fa-solid fa-arrow-rotate-left"></i> Upload another deck
                 </button>
