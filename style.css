@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --accent-primary: #6366f1;
+  --accent-secondary: #a855f7;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --success: #10b981;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  background: radial-gradient(circle at top left, #1e1b4b, transparent),
+              radial-gradient(circle at bottom right, #312e81, transparent),
+              #0f172a;
+}
+
+#app {
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* Upload Section */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.drop-zone {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  border: 2px dashed var(--glass-border);
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 2rem;
+  text-align: center;
+}
+
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--accent-primary);
+  background: rgba(99, 102, 241, 0.1);
+  transform: translateY(-5px);
+}
+
+.drop-zone i {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-primary);
+}
+
+.drop-zone p {
+  font-size: 1.25rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.drop-zone span {
+  color: var(--text-muted);
+}
+
+/* Study Section */
+.study-container {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.progress-wrapper {
+  width: 100%;
+  max-width: 800px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--glass-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Card Styles */
+.flashcard-wrapper {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 16 / 10;
+}
+
+.flashcard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flashcard.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  border-radius: 2rem;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  font-size: 1.75rem;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: rgba(30, 41, 59, 0.9);
+}
+
+.card-content {
+  width: 100%;
+  max-height: 100%;
+}
+
+.card-content img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+button {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+button:hover:not(:disabled) {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: var(--accent-primary);
+}
+
+/* Loading Spinner */
+.loader {
+  display: none;
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--glass-bg);
+  border-bottom-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: rotation 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Transitions */
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Markdown/HTML content within cards */
+.card-content p {
+  margin-bottom: 1rem;
+}
+
+.card-content ul, .card-content ol {
+  text-align: left;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+/* Media Queries */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem; }
+  .flashcard-wrapper { aspect-ratio: 1 / 1; }
+  .card-face { font-size: 1.25rem; padding: 1.5rem; }
+  #app { padding: 1rem; }
+}
